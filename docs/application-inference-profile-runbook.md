@@ -229,6 +229,31 @@ aws bedrock list-inference-profiles \
 
 この確認で `JP Amazon Nova 2 Lite` のコピー元 ARN を特定できます。
 
+## 8. スタック削除
+
+不要になったら CloudFormation スタックごと削除します。
+
+```bash
+aws cloudformation delete-stack \
+  --stack-name application-inference-profile
+
+aws cloudformation wait stack-delete-complete \
+  --stack-name application-inference-profile
+```
+
+削除後の確認例:
+
+```bash
+aws cloudformation describe-stacks \
+  --stack-name application-inference-profile
+```
+
+返り値例:
+
+```text
+aws: [ERROR]: An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id application-inference-profile does not exist
+```
+
 ## 補足
 
 - CloudFormation の既存スタックは、テンプレートの Default 値を変えただけでは更新されません。
