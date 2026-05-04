@@ -35,3 +35,7 @@ gh auth status
 
 - Inference Profile の作成手順や確認コマンドは、このリポジトリに今後追記していきます。
 - 実際の AWS リソース作成前に、対象リージョンと利用するモデルを明確にしておく想定です。
+
+## 手順書
+
+- `docs/application-inference-profile-runbook.md`: Application Inference Profile のテンプレート作成から `aws bedrock-runtime converse` による動作確認までの手順

@@ -1,0 +1,111 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create Amazon Bedrock application inference profiles.
+
+Parameters:
+  InferenceProfileName:
+    Type: String
+    Default: application-inference-profile-apne1-claude-haiku-45
+    Description: Name of the application inference profile to create.
+    MinLength: 1
+    MaxLength: 64
+    AllowedPattern: '^([0-9a-zA-Z][ _-]?)+$'
+
+  InferenceProfileDescription:
+    Type: String
+    Default: Application inference profile managed by CloudFormation
+    Description: Description of the application inference profile.
+    MinLength: 1
+    MaxLength: 200
+    AllowedPattern: '^([0-9a-zA-Z:.][ _-]?)+$'
+
+  ModelSourceProfileId:
+    Type: String
+    Default: jp.anthropic.claude-haiku-4-5-20251001-v1:0
+    Description: ID of the system-defined inference profile to copy from.
+    MinLength: 1
+    MaxLength: 256
+    AllowedPattern: '^[a-zA-Z0-9-:.]+$'
+
+  Nova2LiteInferenceProfileName:
+    Type: String
+    Default: application-inference-profile-apne1-nova-2-lite
+    Description: Name of the Nova 2 Lite application inference profile to create.
+    MinLength: 1
+    MaxLength: 64
+    AllowedPattern: '^([0-9a-zA-Z][ _-]?)+$'
+
+  Nova2LiteInferenceProfileDescription:
+    Type: String
+    Default: Application inference profile for Nova 2 Lite managed by CloudFormation
+    Description: Description of the Nova 2 Lite application inference profile.
+    MinLength: 1
+    MaxLength: 200
+    AllowedPattern: '^([0-9a-zA-Z:.][ _-]?)+$'
+
+  Nova2LiteModelSourceProfileId:
+    Type: String
+    Default: jp.amazon.nova-2-lite-v1:0
+    Description: ID of the system-defined inference profile to copy from for Nova 2 Lite.
+    MinLength: 1
+    MaxLength: 256
+    AllowedPattern: '^[a-zA-Z0-9-:.]+$'
+
+Resources:
+  ApplicationInferenceProfile:
+    Type: AWS::Bedrock::ApplicationInferenceProfile
+    Properties:
+      InferenceProfileName: !Ref InferenceProfileName
+      Description: !Ref InferenceProfileDescription
+      ModelSource:
+        CopyFrom: !Sub
+          - arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/${ProfileId}
+          - ProfileId: !Ref ModelSourceProfileId
+      Tags:
+        - Key: Name
+          Value: !Ref InferenceProfileName
+
+  Nova2LiteApplicationInferenceProfile:
+    Type: AWS::Bedrock::ApplicationInferenceProfile
+    Properties:
+      InferenceProfileName: !Ref Nova2LiteInferenceProfileName
+      Description: !Ref Nova2LiteInferenceProfileDescription
+      ModelSource:
+        CopyFrom: !Sub
+          - arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/${ProfileId}
+          - ProfileId: !Ref Nova2LiteModelSourceProfileId
+      Tags:
+        - Key: Name
+          Value: !Ref Nova2LiteInferenceProfileName
+
+Outputs:
+  InferenceProfileId:
+    Description: ID of the created application inference profile.
+    Value: !Ref ApplicationInferenceProfile
+
+  InferenceProfileArn:
+    Description: ARN of the created application inference profile.
+    Value: !GetAtt ApplicationInferenceProfile.InferenceProfileArn
+
+  InferenceProfileIdentifier:
+    Description: ID or ARN that can be used when invoking the profile.
+    Value: !GetAtt ApplicationInferenceProfile.InferenceProfileIdentifier
+
+  InferenceProfileStatus:
+    Description: Current status of the application inference profile.
+    Value: !GetAtt ApplicationInferenceProfile.Status
+
+  Nova2LiteInferenceProfileId:
+    Description: ID of the created Nova 2 Lite application inference profile.
+    Value: !Ref Nova2LiteApplicationInferenceProfile
+
+  Nova2LiteInferenceProfileArn:
+    Description: ARN of the created Nova 2 Lite application inference profile.
+    Value: !GetAtt Nova2LiteApplicationInferenceProfile.InferenceProfileArn
+
+  Nova2LiteInferenceProfileIdentifier:
+    Description: ID or ARN that can be used when invoking the Nova 2 Lite profile.
+    Value: !GetAtt Nova2LiteApplicationInferenceProfile.InferenceProfileIdentifier
+
+  Nova2LiteInferenceProfileStatus:
+    Description: Current status of the Nova 2 Lite application inference profile.
+    Value: !GetAtt Nova2LiteApplicationInferenceProfile.Status
