@@ -63,6 +63,8 @@ Resources:
       Tags:
         - Key: Name
           Value: !Ref InferenceProfileName
+        - Key: Owner
+          Value: setup0
 
   Nova2LiteApplicationInferenceProfile:
     Type: AWS::Bedrock::ApplicationInferenceProfile
@@ -76,6 +78,8 @@ Resources:
       Tags:
         - Key: Name
           Value: !Ref Nova2LiteInferenceProfileName
+        - Key: Owner
+          Value: setup0
 
 Outputs:
   InferenceProfileId:
