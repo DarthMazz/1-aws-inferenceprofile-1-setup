@@ -2,6 +2,13 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Create Amazon Bedrock application inference profiles.
 
 Parameters:
+  OwnerTagValue:
+    Type: String
+    Default: tag0
+    Description: Value for the Owner tag applied to all Application Inference Profiles.
+    MinLength: 1
+    MaxLength: 128
+
   InferenceProfileName:
     Type: String
     Default: application-inference-profile-apne1-claude-haiku-45
@@ -64,7 +71,7 @@ Resources:
         - Key: Name
           Value: !Ref InferenceProfileName
         - Key: Owner
-          Value: setup0
+          Value: !Ref OwnerTagValue
 
   Nova2LiteApplicationInferenceProfile:
     Type: AWS::Bedrock::ApplicationInferenceProfile
@@ -79,7 +86,7 @@ Resources:
         - Key: Name
           Value: !Ref Nova2LiteInferenceProfileName
         - Key: Owner
-          Value: setup0
+          Value: !Ref OwnerTagValue
 
 Outputs:
   InferenceProfileId:
